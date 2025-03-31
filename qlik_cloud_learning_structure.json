@@ -1,0 +1,101 @@
+{
+    "Enterprise to Qlik Cloud Migration": {
+        "Description": "Qlik Cloud Migration allows enterprises to seamlessly transition their analytics from on-premise Qlik Sense to Qlik Cloud. This process ensures scalability, security, and improved performance.",
+        "Easy": {
+            "Understanding Qlik Cloud Architecture": "https://help.qlik.com/en-US/qlik-cloud-services/",
+            "Qlik Cloud Licensing & User Management": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Introduction/licensing.htm",
+            "Assessing Existing Qlik Enterprise Setup": "https://help.qlik.com/en-US/sense-enterprise/"
+        },
+        "Intermediate": {
+            "Planning Migration Strategy": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Deployment/migration-strategy.htm",
+            "Exporting Qlik Apps & Data Models": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Deployment/export-apps.htm",
+            "Migrating Users & Permissions": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Security/security-overview.htm"
+        },
+        "Advanced": {
+            "Multi-Tenant Architecture Migration": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Deployment/multi-tenant-qlik-cloud.htm",
+            "Optimizing Performance Post-Migration": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Performance/performance-tuning.htm",
+            "Implementing SSO & Security Best Practices": "https://help.qlik.com/en-US/qlik-cloud-services/Subsystems/Hub/Content/Sense_Hub/Security/authentication.htm"
+        },
+        "Color": "#FFC3A0"
+    },
+    "Custom Mashups": {
+        "Description": "Custom Mashups enable the embedding of Qlik Sense analytics in external applications, enhancing visualization interactivity and user experience.",
+        "JavaScript": {
+            "Easy": {
+                "Introduction to Qlik Mashups": "https://help.qlik.com/en-US/sense-developer/May2023/Subsystems/Mashups/Content/Sense_Mashups/mashups-overview.htm",
+                "Using Qlik Engine API in JavaScript": "https://qlik.dev/tutorials/using-the-qlik-engine-api",
+                "Embedding Qlik Objects in Web Pages": "https://qlik.dev/tutorials/embed-qlik-cloud-visualizations"
+            },
+            "Intermediate": {
+                "Building Interactive Mashups with Qlik APIs": "https://qlik.dev/tutorials/building-a-custom-web-app",
+                "Handling Authentication & Authorization": "https://qlik.dev/tutorials/handling-authentication-in-qlik-cloud"
+            },
+            "Advanced": {
+                "Performance Optimization for Mashups": "https://qlik.dev/docs/guides/optimizing-qlik-mashups",
+                "Creating Dynamic & Responsive Qlik Dashboards": "https://qlik.dev/docs/guides/custom-mashups-responsive"
+            }
+        },
+        "Angular": {
+            "Easy": {
+                "Setting Up Angular for Qlik Mashups": "https://qlik.dev/tutorials/angular-integration-with-qlik",
+                "Basic Qlik APIs for Angular": "https://qlik.dev/docs/guides/qlik-angular-setup"
+            },
+            "Intermediate": {
+                "Building Angular Applications with Qlik Data": "https://qlik.dev/tutorials/embedding-qlik-objects-in-angular",
+                "Using Qlik Sense Visualization API in Angular": "https://qlik.dev/docs/guides/qlik-visualization-api-angular"
+            },
+            "Advanced": {
+                "Optimizing Angular Apps with Qlik Data": "https://qlik.dev/docs/guides/angular-performance-best-practices",
+                "Securing Angular Qlik Apps with OAuth2": "https://qlik.dev/docs/guides/oauth2-authentication-angular"
+            }
+        },
+        "Color": "#A0E7E5"
+    },
+    "Custom Extensions": {
+        "JavaScript": {
+            "Easy": {
+                "Introduction to Qlik Sense Extensions": "https://help.qlik.com/en-US/sense-developer/May2023/Subsystems/Extensions/Content/Sense_Extensions/extensions-overview.htm",
+                "Creating a Basic Extension": "https://qlik.dev/tutorials/building-a-qlik-extension"
+            },
+            "Intermediate": {
+                "Developing Advanced Qlik Extensions": "https://qlik.dev/docs/guides/advanced-qlik-extensions",
+                "Using Third-Party Libraries in Extensions": "https://qlik.dev/docs/guides/using-external-libraries"
+            },
+            "Advanced": {
+                "Building Custom Chart Components": "https://qlik.dev/tutorials/creating-custom-qlik-chart",
+                "Deploying Extensions Securely": "https://qlik.dev/docs/guides/security-best-practices-extensions"
+            }
+        },
+        "Angular": {
+            "Easy": {
+                "Introduction to Angular Extensions": "https://qlik.dev/tutorials/angular-qlik-extensions",
+                "Embedding Angular Components in Qlik": "https://qlik.dev/docs/guides/embedding-angular-components"
+            },
+            "Intermediate": {
+                "Building Dynamic Extensions in Angular": "https://qlik.dev/docs/guides/dynamic-angular-extensions",
+                "Handling Qlik API Calls in Angular Extensions": "https://qlik.dev/docs/guides/angular-qlik-api"
+            },
+            "Advanced": {
+                "Optimizing Angular Extensions for Performance": "https://qlik.dev/docs/guides/angular-performance-best-practices",
+                "Advanced Security & Authentication for Extensions": "https://qlik.dev/docs/guides/advanced-security-extensions"
+            }
+        },
+        "Color": "#B4A0E7"
+    },
+    "ODAG": {
+        "Description": "On-Demand App Generation (ODAG) allows users to generate smaller, optimized applications dynamically from a large dataset, improving performance while ensuring detailed analysis only when needed.",
+        "Easy": {
+            "What is On-Demand App Generation (ODAG)": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/on-demand-app-generation.htm",
+            "Setting Up ODAG in Qlik Cloud": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/odag-setup.htm"
+        },
+        "Intermediate": {
+            "ODAG Query Templates": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/odag-query-template.htm",
+            "Optimizing ODAG Performance": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/odag-performance-tips.htm"
+        },
+        "Advanced": {
+            "Building Enterprise-Scale ODAG Solutions": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/odag-enterprise-solutions.htm",
+            "ODAG with Multi-Tenant Architecture": "https://help.qlik.com/en-US/sense-enterprise/May2023/Subsystems/Hub/Content/Sense_Hub/ODAG/odag-multi-tenant.htm"
+        },
+        "Color": "#FFB6C1"
+    }
+}

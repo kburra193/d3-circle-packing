@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qlik Cloud Learning Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      .search-container {
+        margin: 20px;
+      }
+      .search-box {
+        padding: 8px;
+        font-size: 16px;
+        width: 250px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .clear-button {
+        margin-left: 10px;
+        padding: 8px 12px;
+        font-size: 16px;
+        border: none;
+        background: #e7e1e1;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .legend-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        gap: 10px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+      }
+      .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .tooltip {
+        position: absolute;
+        background: white;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        pointer-events: none;
+      }
+      .node {
+        stroke: #ddd;
+        stroke-width: 2px;
+        cursor: pointer;
+        transition: transform 0.2s ease-out, opacity 0.3s ease-in-out;
+      }
+      .node:hover {
+        stroke: orange;
+        stroke-width: 3px;
+      }
+      .highlight {
+        stroke: red !important;
+        stroke-width: 3px !important;
+      }
+      .dimmed {
+        opacity: 0.2;
+      }
+      .label {
+        text-anchor: middle;
+        fill: black;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      .description-container {
+        position: absolute;
+        left: -50%;
+        top: 20%;
+        width: 40%;
+        height: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        transition: left 0.5s ease-in-out;
+        text-align: left;
+        font-size: 16px;
+      }
+      .description-container.show {
+        left: 5%;
+      }
+      .description-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .back-button {
+        display: block;
+        margin-top: 20px;
+        padding: 8px 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .visualization-container {
+        transition: transform 0.5s ease-in-out;
+      }
+      .visualization-container.shrink {
+        transform: translateX(30%) scale(0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-box"
+        placeholder="Search for a Qlik topic..."
+      />
+      <button class="clear-button" onclick="clearSearch()">X</button>
+    </div>
+
+    <div class="legend-container" id="legend"></div>
+    <div class="description-container" id="descriptionPanel">
+      <div class="description-title" id="descriptionTitle"></div>
+      <div id="descriptionText"></div>
+      <button class="back-button" onclick="resetVisualization()">Back</button>
+    </div>
+    <div class="visualization-container">
+      <svg width="1000" height="800"></svg>
+    </div>
+    <div class="tooltip"></div>
+
+    <script>
+      let categoryColors = {};
+      let categoryDescriptions = {}; // Store descriptions dynamically
+
+      fetch("qlik_cloud_learning_structure.json")
+        .then((response) => response.json())
+        .then((jsonData) => {
+          categoryColors = Object.keys(jsonData).reduce((acc, category) => {
+            acc[category] = jsonData[category]["Color"];
+            categoryDescriptions[category] =
+              jsonData[category]["Description"] || "No description available.";
+            return acc;
+          }, {});
+
+          createLegend();
+          const transformedData = transformData(jsonData);
+          drawVisualization(transformedData);
+        })
+        .catch((error) => console.error("Error loading JSON:", error));
+
+      function transformData(data) {
+        const root = { name: "Qlik Cloud Learning", children: [] };
+
+        Object.keys(data).forEach((category) => {
+          if (category === "Description") return; // Ignore description at root level
+
+          const categoryNode = {
+            name: category,
+            children: [],
+            color: data[category]["Color"],
+          };
+
+          Object.keys(data[category]).forEach((key) => {
+            if (key === "Color" || key === "Description") return; // Ignore description and color keys
+
+            let difficultyNode;
+
+            if (["Easy", "Intermediate", "Advanced"].includes(key)) {
+              difficultyNode = {
+                name: key,
+                children: [],
+                color: data[category]["Color"],
+              };
+
+              Object.keys(data[category][key]).forEach((topic) => {
+                difficultyNode.children.push({
+                  name: topic,
+                  url: data[category][key][topic],
+                });
+              });
+
+              categoryNode.children.push(difficultyNode);
+            } else {
+              let subCategoryNode = {
+                name: key,
+                children: [],
+                color: data[category]["Color"],
+              };
+
+              Object.keys(data[category][key]).forEach((difficulty) => {
+                if (difficulty === "Description") return; // Ignore descriptions
+
+                difficultyNode = {
+                  name: difficulty,
+                  children: [],
+                  color: data[category]["Color"],
+                };
+
+                Object.keys(data[category][key][difficulty]).forEach(
+                  (topic) => {
+                    difficultyNode.children.push({
+                      name: topic,
+                      url: data[category][key][difficulty][topic],
+                    });
+                  }
+                );
+
+                subCategoryNode.children.push(difficultyNode);
+              });
+
+              categoryNode.children.push(subCategoryNode);
+            }
+          });
+
+          root.children.push(categoryNode);
+        });
+
+        return root;
+      }
+
+      function drawVisualization(data) {
+        const width = 1000;
+        const height = 800;
+
+        const svg = d3
+          .select("svg")
+          .attr("viewBox", `0 0 ${width} ${height}`)
+          .attr("preserveAspectRatio", "xMidYMid meet");
+
+        const tooltip = d3.select(".tooltip");
+
+        const root = d3
+          .hierarchy(data)
+          .sum((d) => (d.children ? 30 : 10))
+          .sort((a, b) => b.value - a.value);
+
+        const pack = d3
+          .pack()
+          .size([width - 50, height - 50])
+          .padding(5);
+
+        pack(root);
+
+        const nodes = svg
+          .append("g")
+          .attr("transform", "translate(25, 25)")
+          .selectAll("g")
+          .data(root.descendants())
+          .enter()
+          .append("g")
+          .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+        nodes
+          .append("circle")
+          .attr("r", (d) => d.r)
+          .attr("class", "node")
+          .attr("fill", (d) =>
+            d.depth === 0 ? "white" : d.data.color || "#d3d3d3"
+          )
+          .attr("data-name", (d) => d.data.name)
+          .on("mouseover", function (event, d) {
+            d3.select(this)
+              .transition()
+              .duration(200)
+              .attr("stroke", "orange")
+              .attr("stroke-width", 3)
+              .attr("r", d.r * 1.1);
+
+            // Only show topic name, remove "Open Resource" link
+            tooltip
+              .style("display", "block")
+              .html(`<strong>${d.data.name}</strong>`)
+              .style("left", event.pageX + 10 + "px")
+              .style("top", event.pageY - 20 + "px");
+          })
+          .on("mouseout", function () {
+            d3.select(this)
+              .transition()
+              .duration(200)
+              .attr("stroke", "#ddd")
+              .attr("stroke-width", 2);
+
+            tooltip.style("display", "none");
+          })
+          .on("click", function (event, d) {
+            if (d.depth === 1) {
+              // Ensure only category-level nodes trigger the description
+              showDescription(d.data.name);
+            }
+          });
+
+        // Ensure tooltip stays active when hovered
+        tooltip
+          .on("mouseover", function () {
+            tooltip.style("display", "block");
+          })
+          .on("mouseout", function () {
+            tooltip.style("display", "none");
+          });
+
+        nodes
+          .filter((d) => d.depth === 1 || d.depth === 2)
+          .append("text")
+          .attr("class", "label")
+          .attr("dy", (d) => -d.r * 0.7)
+          .style("font-size", "14px")
+          .text((d) => d.data.name);
+
+        // 🔍 **Search Functionality**
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", function () {
+            const searchTerm = this.value.toLowerCase();
+
+            nodes
+              .selectAll("circle")
+              .classed(
+                "highlight",
+                (d) =>
+                  searchTerm && d.data.name.toLowerCase().includes(searchTerm)
+              )
+              .classed(
+                "dimmed",
+                (d) =>
+                  searchTerm && !d.data.name.toLowerCase().includes(searchTerm)
+              );
+
+            nodes
+              .selectAll("text")
+              .style("font-weight", (d) =>
+                searchTerm && d.data.name.toLowerCase().includes(searchTerm)
+                  ? "bold"
+                  : "normal"
+              );
+          });
+      }
+
+      function showDescription(topicName) {
+        const descriptionPanel = document.getElementById("descriptionPanel");
+        const descriptionTitle = document.getElementById("descriptionTitle");
+        const descriptionText = document.getElementById("descriptionText");
+        const vizContainer = document.querySelector(".visualization-container");
+
+        descriptionTitle.innerText = topicName;
+        descriptionText.innerText =
+          categoryDescriptions[topicName] || "No description available.";
+        descriptionPanel.classList.add("show");
+        vizContainer.classList.add("shrink");
+      }
+
+      function resetVisualization() {
+        document.getElementById("descriptionPanel").classList.remove("show");
+        document
+          .querySelector(".visualization-container")
+          .classList.remove("shrink");
+      }
+
+      function clearSearch() {
+        document.getElementById("searchInput").value = "";
+        updateSearch("");
+      }
+
+      function updateSearch(searchTerm) {
+        const nodes = d3.select("svg").selectAll("g");
+
+        nodes
+          .selectAll("circle")
+          .classed(
+            "highlight",
+            (d) => searchTerm && d.data.name.toLowerCase().includes(searchTerm)
+          )
+          .classed(
+            "dimmed",
+            (d) => searchTerm && !d.data.name.toLowerCase().includes(searchTerm)
+          );
+
+        nodes
+          .selectAll("text")
+          .style("font-weight", (d) =>
+            searchTerm && d.data.name.toLowerCase().includes(searchTerm)
+              ? "bold"
+              : "normal"
+          );
+      }
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function () {
+          updateSearch(this.value.toLowerCase());
+        });
+
+      function createLegend() {
+        const legend = d3.select("#legend");
+        Object.keys(categoryColors).forEach((category) => {
+          legend
+            .append("div")
+            .attr("class", "legend-item")
+            .html(
+              `<div class="legend-color" style="background:${categoryColors[category]}"></div> ${category}`
+            );
+        });
+      }
+    </script>
+  </body>
+</html>
