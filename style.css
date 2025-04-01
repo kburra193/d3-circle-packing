@@ -1,0 +1,194 @@
+/* style.css */
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.search-container {
+  margin: 20px;
+}
+
+.search-box {
+  padding: 8px;
+  font-size: 16px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.clear-button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  background: #e7e1e1;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.legend-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.tooltip {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
+
+.node {
+  stroke: #ddd;
+  stroke-width: 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease-out, opacity 0.3s ease-in-out;
+}
+
+.node:hover {
+  stroke: orange;
+  stroke-width: 3px;
+}
+
+.highlight {
+  stroke: red !important;
+  stroke-width: 3px !important;
+}
+
+.dimmed {
+  opacity: 0.2;
+}
+
+.label {
+  text-anchor: middle;
+  fill: black;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.description-body a {
+  display: block;
+  margin: 5px 0 15px;
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.description-body a:hover {
+  color: #0c53b0;
+  text-decoration: underline;
+}
+
+.description-body strong::before {
+  content: none !important;
+  margin-right: 4px;
+}
+
+.description-body {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.description-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.description-container {
+  position: absolute;
+  left: -50%;
+  top: 20%;
+  width: 40%;
+  height: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  text-align: left;
+  font-size: 16px;
+}
+
+.description-container.show {
+  left: 5%;
+  opacity: 1;
+}
+
+.description-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.back-button {
+  display: block;
+  margin-top: 20px;
+  padding: 8px 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.visualization-container {
+  transition: transform 0.5s ease-in-out;
+}
+
+.visualization-container.shrink {
+  transform: translateX(30%) scale(0.8); /* Shrink the visualization */
+  transition: transform 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    r: 30px;
+  }
+  50% {
+    r: 35px;
+  }
+  100% {
+    r: 30px;
+  }
+}
+
+.selected-node {
+  animation: pulse 3s infinite;
+  fill: #007bff; /* Make selected nodes blue */
+  stroke-width: 4px;
+}
